@@ -1,11 +1,12 @@
+import fs from "fs/promises";
+
 import Contact from "../models/Contact.js";
-import HttpError from "../helpers/HttpError.js";
+import { HttpError } from "../helpers/index.js";
 import contactsSchema from "../schemes/contacts-schema.js";
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res, next) => {
   const { _id: owner } = req.user;
-  // const { page = 1, limit = 10 } = req.query;
   const result = await Contact.find({ owner });
 
   res.json(result);
@@ -22,14 +23,9 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   const { _id: owner } = req.user;
+
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
-  // const { error } = contactsSchema.contactsAddSchema.validate(req.body);
-  // if (error) {
-  //   throw HttpError(400, error.message);
-  // }
-  // const result = await Contact.create(req.body);
-  // res.status(201).json(result);
 };
 
 const remove = async (req, res, next) => {
